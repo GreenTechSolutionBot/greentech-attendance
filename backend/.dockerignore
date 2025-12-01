@@ -1,0 +1,39 @@
+# Git
+.git
+.gitignore
+
+# 环境变量文件
+.env
+.env.local
+.env.*.local
+
+# 编译输出
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+main
+
+# 测试文件
+*_test.go
+test/
+
+# 日志
+*.log
+nohup.out
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# 临时文件
+tmp/
+temp/
