@@ -12,6 +12,7 @@ COPY go.mod go.sum ./
 
 # 下载依赖
 RUN go mod download
+RUN go mod tidy
 
 # 复制源代码
 COPY . .
@@ -26,7 +27,7 @@ FROM alpine:latest
 RUN apk --no-cache add ca-certificates tzdata
 
 # 设置时区
-ENV TZ=Asia/Shanghai
+ENV TZ=Asia/Tokyo
 
 # 创建非 root 用户
 RUN addgroup -g 1000 app && \
