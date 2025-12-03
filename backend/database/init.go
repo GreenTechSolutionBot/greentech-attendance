@@ -35,6 +35,8 @@ func InitDatabase(db *sql.DB) error {
 			user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
 			check_in_time TIMESTAMP NOT NULL,
 			check_out_time TIMESTAMP,
+			check_in_location TEXT,
+			check_out_location TEXT,
 			status VARCHAR(20) DEFAULT 'normal',
 			notes TEXT,
 			location VARCHAR(255),
@@ -45,6 +47,29 @@ func InitDatabase(db *sql.DB) error {
 		return fmt.Errorf("create attendance_records table failed: %v", err)
 	}
 	log.Println("✓ Attendance records table created")
+
+	// 添加位置字段到已存在的表（如果不存在）
+	_, err = db.Exec(`
+		DO $$ 
+		BEGIN
+			IF NOT EXISTS (
+				SELECT 1 FROM information_schema.columns 
+				WHERE table_name='attendance_records' AND column_name='check_in_location'
+			) THEN
+				ALTER TABLE attendance_records ADD COLUMN check_in_location TEXT;
+			END IF;
+			
+			IF NOT EXISTS (
+				SELECT 1 FROM information_schema.columns 
+				WHERE table_name='attendance_records' AND column_name='check_out_location'
+			) THEN
+				ALTER TABLE attendance_records ADD COLUMN check_out_location TEXT;
+			END IF;
+		END $$;
+	`)
+	if err != nil {
+		log.Printf("Warning: could not add location columns: %v", err)
+	}
 
 	_, err = db.Exec(`
 		CREATE TABLE IF NOT EXISTS leave_requests (

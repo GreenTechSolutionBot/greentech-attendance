@@ -16,6 +16,8 @@ export interface AttendanceRecord {
     user_name?: string;
     check_in_time: string;
     check_out_time?: string;
+    check_in_location?: string;
+    check_out_location?: string;
     status: string;
     notes?: string;
     location?: string;
